@@ -204,6 +204,23 @@ export default function App() {
      ========================================================= */
   useEffect(() => {
     // TODO 2.1: Implement fetching users here (see lab instructions)
+      setLoading(true)
+      setError(null)
+      fetch("https://jsonplaceholder.typicode.com/users")
+         .then(response => {
+            if (!response.ok) {
+               throw new Error("Network response was not ok");
+            }
+            return response.json();
+         })
+         .then(data => {
+            setUsers(data);
+            setLoading(false);
+         })
+         .catch(error => {
+            setError(error.message);
+            setLoading(false);
+         });
   }, []);
 
   /* =========================================================
@@ -215,6 +232,14 @@ export default function App() {
      ========================================================= */
   useEffect(() => {
     // TODO 2.2: Implement filtering users here (see lab instructions)
+      if (searchTerm === "") {
+         setFilteredUsers(users);
+      } else {
+         const filtered = users.filter(user =>
+            user.name.toLowerCase().includes(searchTerm.toLowerCase())
+         );
+         setFilteredUsers(filtered);
+      }
   }, [searchTerm, users]);
 
   // Modal handlers (already complete)
